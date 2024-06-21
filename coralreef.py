@@ -165,7 +165,19 @@ def main():
     # Flatten images
     flattened_images = flatten_images(adjusted_images)
 
+    # Debugging: Check shapes and lengths of the data before splitting
+    st.write(f"Flattened images shape: {flattened_images.shape}")
+    st.write(f"Augmented labels length: {len(augmented_labels)}")
+
     # Train-test split
+    if len(flattened_images) != len(augmented_labels):
+        st.error("The number of images does not match the number of labels!")
+        return
+
+    if len(flattened_images) < 5 or len(augmented_labels) < 5:
+        st.error("Not enough data to perform train-test split!")
+        return
+
     X_train, X_test, y_train, y_test = train_test_split(flattened_images, augmented_labels, test_size=0.2, random_state=42)
 
     # Train model
