@@ -153,6 +153,10 @@ def main():
     # Load and preprocess images
     images, labels, duplicates = load_images()
 
+    # Debug: Check the number of images per class
+    st.write(f"Number of healthy coral images: {np.sum(labels == 0)}")
+    st.write(f"Number of bleached coral images: {np.sum(labels == 1)}")
+
     # Augment images
     augmented_images, augmented_labels = augment_images(images, labels)
 
@@ -179,6 +183,11 @@ def main():
         return
 
     X_train, X_test, y_train, y_test = train_test_split(flattened_images, augmented_labels, test_size=0.2, random_state=42)
+
+    # Ensure there are at least two classes in the training data
+    if len(np.unique(y_train)) < 2:
+        st.error("Training data must have at least two classes!")
+        return
 
     # Train model
     model, grid_search = train_model(X_train, y_train)
