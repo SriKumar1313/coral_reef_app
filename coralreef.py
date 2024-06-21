@@ -157,6 +157,11 @@ def main():
     st.write(f"Number of healthy coral images: {np.sum(labels == 0)}")
     st.write(f"Number of bleached coral images: {np.sum(labels == 1)}")
 
+    # Ensure there are enough images in both classes
+    if np.sum(labels == 0) == 0 or np.sum(labels == 1) == 0:
+        st.error("Each class must have at least one image. Please check your data.")
+        return
+
     # Augment images
     augmented_images, augmented_labels = augment_images(images, labels)
 
