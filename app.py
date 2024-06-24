@@ -1,34 +1,25 @@
 import streamlit as st
-import numpy as np
 import os
-from PIL import Image, ImageOps
+import numpy as np
 import pickle
-from sklearn.pipeline import Pipeline
+from PIL import Image, ImageOps
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-# Function to load the SVM model
-def load_model(model_path):
-    with open(model_path, 'rb') as file:
-        model = pickle.load(file)
-    return model
-
 # Function to preprocess the uploaded image
 def preprocess_image(image, img_size=(64, 64)):
-    img = ImageOps.fit(image, img_size, Image.LANCZOS)  # Use Image.LANCZOS for high-quality resizing
+    img = ImageOps.fit(image, img_size, Image.ANTIALIAS)
     img = ImageOps.grayscale(img)
     img_array = np.array(img).flatten()
     return img_array
 
 # Function to make predictions
-def predict(image, model):
+def predict(image, model, scaler, pca):
     # Preprocess image
     img_array = preprocess_image(image)
-    # Scale and apply PCA
-    scaler = StandardScaler()
-    pca = PCA(n_components=0.95)
-    img_scaled = scaler.fit_transform(img_array.reshape(1, -1))
-    img_pca = pca.fit_transform(img_scaled)
+    # Scale and apply PCA using the provided scaler and pca
+    img_scaled = scaler.transform(img_array.reshape(1, -1))
+    img_pca = pca.transform(img_scaled)
     # Predict using the model
     prediction = model.predict(img_pca)
     return prediction
@@ -50,11 +41,12 @@ def main():
             st.write("Error: SVM model file not found.")
             return
 
-        # Load SVM model
-        svm_model = load_model(model_path)
+        # Load SVM model and preprocessing components
+        with open(model_path, 'rb') as file:
+            svm_model, scaler, pca = pickle.load(file)
 
         # Make prediction
-        prediction = predict(image, svm_model)
+        prediction = predict(image, svm_model, scaler, pca)
 
         # Display prediction
         categories = ['healthy', 'bleached']
