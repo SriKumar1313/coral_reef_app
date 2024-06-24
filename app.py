@@ -38,12 +38,15 @@ def main():
 
     # Adding background image
     st.markdown(
-        """
+        f"""
         <style>
-        body {
+        .stApp {{
             background-image: url('assets/background.png');
             background-size: cover;
-        }
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
         </style>
         """,
         unsafe_allow_html=True
