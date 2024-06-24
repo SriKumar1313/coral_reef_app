@@ -30,7 +30,7 @@ def predict(image, model, scaler, pca):
 # Main function to run the Streamlit web app
 def main():
     st.set_page_config(
-        page_title="Coral Reef Image Classifier",
+        page_title="Coral Reef Image Classifier App",
         page_icon=":shark:",
         layout="centered",
         initial_sidebar_state="expanded",
