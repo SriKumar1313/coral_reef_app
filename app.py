@@ -1,6 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
+import os  # Import os module for file operations
 from PIL import Image, ImageOps
 import pickle
 from sklearn.pipeline import Pipeline
@@ -46,7 +47,7 @@ def main():
 
         # Check if the model file exists
         model_path = 'svm_model_pca.pkl'
-        if not os.path.exists(model_path):
+        if not os.path.exists(model_path):  # Fix: Added os module prefix
             st.write("Error: SVM model file not found.")
             return
 
