@@ -25,7 +25,7 @@ def predict(image, model, scaler, pca):
     img_scaled = scaler.transform(img_array.reshape(1, -1))
     img_pca = pca.transform(img_scaled)
     prediction = model.predict(img_pca)
-    return prediction
+    return prediction, model.decision_function(img_pca)
 
 # Main function to run the Streamlit web app
 def main():
@@ -72,9 +72,15 @@ def main():
         svm_model, scaler, pca = load_model(model_path)
 
         # Make prediction
-        prediction = predict(image, svm_model, scaler, pca)
+        prediction, decision_function = predict(image, svm_model, scaler, pca)
         categories = ['healthy_corals', 'bleached_corals']
-        st.write(f"Prediction: {categories[prediction[0]]}")
+        
+        # Define a threshold for "Not a coral" (you can adjust this threshold based on your model's decision function values)
+        threshold = 0.5
+        if max(decision_function) < threshold:
+            st.write("Prediction: Not a coral")
+        else:
+            st.write(f"Prediction: {categories[prediction[0]]}")
 
 if __name__ == '__main__':
     main()
