@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
-import pandas as pd
-import os  # Import os module for file operations
+import os
 from PIL import Image, ImageOps
 import pickle
 from sklearn.pipeline import Pipeline
@@ -16,7 +15,7 @@ def load_model(model_path):
 
 # Function to preprocess the uploaded image
 def preprocess_image(image, img_size=(64, 64)):
-    img = ImageOps.fit(image, img_size, Image.ANTIALIAS)
+    img = ImageOps.fit(image, img_size, Image.LANCZOS)  # Use Image.LANCZOS for high-quality resizing
     img = ImageOps.grayscale(img)
     img_array = np.array(img).flatten()
     return img_array
@@ -47,7 +46,7 @@ def main():
 
         # Check if the model file exists
         model_path = 'svm_model_pca.pkl'
-        if not os.path.exists(model_path):  # Fix: Added os module prefix
+        if not os.path.exists(model_path):
             st.write("Error: SVM model file not found.")
             return
 
