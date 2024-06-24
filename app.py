@@ -29,6 +29,26 @@ def predict(image, model, scaler, pca):
 
 # Main function to run the Streamlit web app
 def main():
+    st.set_page_config(
+        page_title="Coral Reef Image Classifier",
+        page_icon=":shark:",
+        layout="centered",
+        initial_sidebar_state="expanded",
+    )
+
+    # Adding background image
+    st.markdown(
+        """
+        <style>
+        body {
+            background-image: url('assets/background.jpg');
+            background-size: cover;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     st.title("Coral Reef Image Classifier")
     st.sidebar.title("Upload Image")
     
